@@ -27,7 +27,7 @@
             </div>
 
             <nav class="flex-1 px-4 py-6">
-                <ul class="space-y-3">
+                <ul class="space-y-3 mt-3">
 
                     <li>
                         <a href="/admin"
@@ -39,14 +39,14 @@
                     <li>
                         <a href="/admin/profile"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition {{ request()->is('admin/profile') ? 'bg-teal-500 text-gray-900' : '' }}">
-                            <i class="fas fa-user-edit w-5"></i>
+                            <i class="fas fa-circle-info w-5"></i>
                             <span>Tentang Kami</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/banner"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition {{ request()->is('admin/banner') ? 'bg-teal-500 text-gray-900' : '' }}">
-                            <i class="fas fa-image w-5"></i>
+                            <i class="fas fa-bowl-food"></i>
                             <span>Nutrisi Produk</span>
                         </a>
                     </li>
