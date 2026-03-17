@@ -2,24 +2,32 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
+
 class OpenFoodFactsService
 {
-    protected string $baseUrl = 'https://id.openfoodfacts.org';
+    protected string $baseUrl = 'https://world.openfoodfacts.org';
 
     public function searchProducts(string $query = '', int $page = 1, int $pageSize = 24, string $grade = ''): array
     {
-        $params = http_build_query(array_filter([
-            'search_terms' => $query,
-            'page'         => $page,
-            'page_size'    => $pageSize,
-            'json'         => 'true',
-            'fields'       => 'code,product_name,brands,categories,image_url,image_front_url,nutrition_grades,nutriments,ingredients_text,serving_size,nutriscore_score,nutriscore_grade',
+        $params = array_filter([
+            'search_terms'     => $query,
+            'page'             => $page,
+            'page_size'        => $pageSize,
+            'json'             => 'true',
+            'fields'           => 'code,product_name,brands,categories,image_url,image_front_url,nutrition_grades,nutriments,ingredients_text,serving_size,nutriscore_score,nutriscore_grade',
             'nutrition_grades' => $grade ?: null,
-        ]));
+        ]);
 
-        $url = $this->baseUrl . '/cgi/search.pl?' . $params;
+        $response = Http::withHeaders([
+            'User-Agent' => 'NutriCare/1.0 (tugas kuliah)',
+        ])->timeout(15)->get($this->baseUrl . '/cgi/search.pl', $params);
 
-        $data = $this->fetch($url);
+        if (!$response->successful()) {
+            return ['products' => [], 'totalPages' => 0];
+        }
+
+        $data = $response->json();
 
         if (!$data || !isset($data['products'])) {
             return ['products' => [], 'totalPages' => 0];
@@ -38,8 +46,15 @@ class OpenFoodFactsService
 
     public function getProduct(string $code): ?array
     {
-        $url  = $this->baseUrl . '/api/v0/product/' . urlencode($code) . '.json';
-        $data = $this->fetch($url);
+        $response = Http::withHeaders([
+            'User-Agent' => 'NutriCare/1.0 (tugas kuliah)',
+        ])->timeout(15)->get($this->baseUrl . '/api/v0/product/' . urlencode($code) . '.json');
+
+        if (!$response->successful()) {
+            return null;
+        }
+
+        $data = $response->json();
 
         if (!$data || ($data['status'] ?? 0) !== 1 || empty($data['product'])) {
             return null;
@@ -72,29 +87,5 @@ class OpenFoodFactsService
             'nutriscore_score'=> $p['nutriscore_score'] ?? null,
             'nutriscore_grade'=> $p['nutriscore_grade'] ?? $grade,
         ];
-    }
-
-    private function fetch(string $url): ?array
-    {
-        $ctx = stream_context_create([
-            'http' => [
-                'timeout'        => 15,
-                'method'         => 'GET',
-                'header'         => "User-Agent: NutriCare/1.0 (tugas kuliah)\r\n",
-                'ignore_errors'  => true,
-            ],
-            'ssl' => [
-                'verify_peer'      => false,
-                'verify_peer_name' => false,
-            ],
-        ]);
-
-        $raw = @file_get_contents($url, false, $ctx);
-
-        if ($raw === false) {
-            return null;
-        }
-
-        return json_decode($raw, true);
     }
 }
