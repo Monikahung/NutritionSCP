@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AboutUsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\NutritionProductController;
 use Illuminate\Support\Facades\Http;
