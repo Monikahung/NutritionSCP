@@ -5,15 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'NutriCare - Admin')</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
     <!-- Tailwind --> @vite(['resources/css/app.css', 'resources/js/app.js']) <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+<body class="font-jakarta-sans bg-gray-100 leading-normal tracking-normal">
 
     <div class="flex h-screen">
 
@@ -26,12 +22,12 @@
                         class="w-10 h-10 bg-white rounded-md flex items-center justify-center text-teal-700 font-bold text-2xl">
                         N
                     </div>
-                    <span class="text-xl font-bold">NutriCare</span>
+                    <span class="font-poppins text-xl font-bold">NutriCare</span>
                 </div>
             </div>
 
             <nav class="flex-1 px-4 py-6">
-                <ul class="space-y-2">
+                <ul class="space-y-3">
 
                     <li>
                         <a href="/admin"
@@ -56,7 +52,7 @@
                     </li>
                     <li>
                         <a href="/admin/articles"
-                            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition {{ request()->is('admin/articles*') ? 'bg-teal-500 text-gray-900' : '' }}">
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-00 transition {{ request()->is('admin/articles*') ? 'bg-teal-500 text-gray-900' : '' }}">
                             <i class="fas fa-newspaper w-5"></i>
                             <span>Artikel</span>
                         </a>
@@ -64,13 +60,24 @@
 
                 </ul>
             </nav>
+            <!-- Logout -->
+            <div class="p-4 border-t border-teal-400">
+                <form method="POST" action="/logout">
+                    @csrf
+                    <button type="submit"
+                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-jetblack text-white hover:bg-[#1b2327] transition">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Keluar</span>
+                    </button>
+                </form>
+            </div>
 
 
 
         </aside>
 
         <!-- Area konten utama -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        {{-- <div class="flex-1 flex flex-col overflow-hidden">
 
             <!-- Topbar / Header -->
             <header class="bg-white shadow-sm">
@@ -100,7 +107,7 @@
                 @yield('content')
             </main>
 
-        </div>
+        </div> --}}
     </div>
 
 </body>
