@@ -6,9 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Http\\Controllers\\Admin\\HomeAdminController' => $baseDir . '/app/Http/Controllers/Admin/HomeAdminController.php',
+    'App\\Http\\Controllers\\Admin\\NutritionProductController' => $baseDir . '/app/Http/Controllers/Admin/NutritionProductController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\HomeAdminController' => $baseDir . '/app/Http/Controllers/HomeAdminController.php',
+    'App\\Http\\Controllers\\HomePublicController' => $baseDir . '/app/Http/Controllers/HomePublicController.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
+    'App\\Services\\OpenFoodFactsService' => $baseDir . '/app/Services/OpenFoodFactsService.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Brick\\Math\\BigDecimal' => $vendorDir . '/brick/math/src/BigDecimal.php',
     'Brick\\Math\\BigInteger' => $vendorDir . '/brick/math/src/BigInteger.php',

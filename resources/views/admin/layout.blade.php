@@ -11,20 +11,12 @@
 
 <body class="font-jakarta-sans bg-gray-100 leading-normal tracking-normal">
 
-    <div class="flex h-screen overflow-hidden">
-
-        <!-- Mobile overlay -->
-        <div id="sidebar-overlay"
-             class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"
-             onclick="closeSidebar()">
-        </div>
+    <div class="flex h-screen">
 
         <!-- SIDEBAR kiri -->
-        <aside id="sidebar"
-               class="fixed md:static inset-y-0 left-0 z-30 w-64 bg-teal-700 text-white flex flex-col
-                      -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <aside class="w-64 bg-teal-700 text-white flex flex-col">
 
-            <div class="p-6 border-b border-teal-600 flex items-center justify-between">
+            <div class="p-6 border-b border-teal-600">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-white rounded-md flex items-center justify-center text-teal-700 font-bold text-2xl">
                         N
