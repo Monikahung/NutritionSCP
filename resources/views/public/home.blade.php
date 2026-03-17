@@ -161,7 +161,7 @@
             </div>
         </section>
 
-        <section id="artikel" class="w-full bg-tealmist py-20 px-6 lg:px-16">
+        <!-- <section id="artikel" class="w-full bg-tealmist py-20 px-6 lg:px-16">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center flex flex-col gap-3 mb-14">
                     <h2 class="text-4xl font-bold text-jetblack tracking-tight">Artikel</h2>
@@ -205,7 +205,7 @@
                     </a>
                 </div>
             </div>
-        </section>
+        </section> -->
 
 </main>
 
