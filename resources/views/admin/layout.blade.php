@@ -10,12 +10,9 @@
 </head>
 
 <body class="font-jakarta-sans bg-gray-100 leading-normal tracking-normal">
-
     <div class="flex h-screen">
-
         <!-- SIDEBAR kiri -->
         <aside class="w-64 bg-teal-700 text-white flex flex-col">
-
             <div class="p-6 border-b border-teal-600">
                 <div class="flex items-center gap-3">
                     <div
