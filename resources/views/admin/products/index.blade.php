@@ -1,10 +1,11 @@
 @extends('admin.layout')
+
+@section('page-title', 'Nutrisi Produk')
 @section('content')
 <div class="p-6 lg:p-8">
-    <h1 class="text-2xl font-bold text-jetBlack mb-6">Nutrisi Produk</h1>
 
     <!-- Search Bar -->
-    <form method="GET" action="{{ route('products.index')}}" class="mb-6">
+    <form method="GET" action="{{ route('products.index')}}" class="mb-4">
         <div class="flex gap-2">
             <div class="relative flex-1">
                 <input type="text" name="q" value="{{ $query ?? '' }}"
@@ -18,7 +19,7 @@
             </div>
             <input type="hidden" name="grade" value="{{ $grade ?? '' }}">
             <button type="submit"
-                    class="bg-tealMist text-white px-6 py-3 rounded-xl font-semibold hover:bg-tealMist/90 transition-colors text-sm">
+                    class="bg-tealmist text-white px-6 py-3 rounded-xl font-semibold hover:bg-tealMist/90 transition-colors text-sm">
                 Cari
             </button>
         </div>

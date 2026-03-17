@@ -1,9 +1,8 @@
 @extends('admin.layout')
-@section('title', 'Beranda - NutriCare Admin')
+@section('page-title', 'Beranda')
 
 @section('content')
 <div>
-    <h1 class="text-3xl font-bold text-jetblack mb-6">Beranda</h1>
 
     <!-- Profile Card -->
     <div class="bg-teal-700 rounded-2xl p-6 mb-5 text-white shadow-md">

@@ -1,9 +1,8 @@
 @extends('admin.layout')
-@section('title', 'Tentang Kami')
+@section('page-title', 'Tentang Kami')
 
 @section('content')
-<div class="p-6 lg:p-8 max-w-4xl">
-    <h1 class="text-2xl font-bold text-jetBlack mb-6">Tentang Kami</h1>
+<div class="p-6 lg:p-4 max-w-max">
 
     <div class="bg-white rounded-xl p-6 mb-5 shadow-sm">
         <div class="flex items-center gap-3 mb-4">

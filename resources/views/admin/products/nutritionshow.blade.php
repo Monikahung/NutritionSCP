@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('title', $product['product_name'] ?? 'Detail Produk')
+@section('page-title', $product['product_name'] ?? 'Detail Produk')
 
 @section('content')
 <div class="p-6 lg:p-8">
