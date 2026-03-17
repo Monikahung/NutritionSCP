@@ -30,7 +30,7 @@
                 <ul class="space-y-3 mt-3">
 
                     <li>
-                        <a href="/admin"
+                        <a href="{{ route('dashboardadmin') }}"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 {{ request()->is('admin') ? 'bg-teal-500' : '' }}">
                             <i class="fas fa-home w-5"></i>
                             Beranda
@@ -44,14 +44,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/produk"
+                        <a href="{{ route('products.index') }}"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 {{ request()->is('admin/banner') ? 'bg-teal-500 text-gray-900' : '' }}">
                             <i class="fas fa-bowl-food"></i>
                             <span>Nutrisi Produk</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/articles"
+                        <a href="{{ route('aboutus') }}"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition {{ request()->is('admin/articles*') ? 'bg-teal-500 text-gray-900' : '' }}">
                             <i class="fas fa-newspaper w-5"></i>
                             <span>Artikel</span>
