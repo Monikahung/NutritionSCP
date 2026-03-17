@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\ServiceProvider;
-
 class OpenFoodFactsService
 {
     protected string $baseUrl = 'https://id.openfoodfacts.org';
@@ -56,7 +54,7 @@ class OpenFoodFactsService
         $grade = strtolower(trim($p['nutrition_grades'] ?? ''));
         $image = $p['image_url'] ?? $p['image_front_url'] ?? '';
 
-        if (!$name || !$grade || !in_array($grade, ['a', 'b', 'c', 'd', 'e'], true)) {
+        if (!$name || !$grade || !in_array($grade, ['a','b','c','d','e'], true)) {
             return null;
         }
 
@@ -67,12 +65,12 @@ class OpenFoodFactsService
             'brands'          => trim($p['brands'] ?? ''),
             'categories'      => $p['categories'] ?? '',
             'image_url'       => $image,
-            'nutrition_grades' => $grade,
+            'nutrition_grades'=> $grade,
             'nutriments'      => $p['nutriments'] ?? [],
-            'ingredients_text' => $p['ingredients_text'] ?? '',
+            'ingredients_text'=> $p['ingredients_text'] ?? '',
             'serving_size'    => $p['serving_size'] ?? null,
-            'nutriscore_score' => $p['nutriscore_score'] ?? null,
-            'nutriscore_grade' => $p['nutriscore_grade'] ?? $grade,
+            'nutriscore_score'=> $p['nutriscore_score'] ?? null,
+            'nutriscore_grade'=> $p['nutriscore_grade'] ?? $grade,
         ];
     }
 

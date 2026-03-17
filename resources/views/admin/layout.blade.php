@@ -38,14 +38,14 @@
                     </li>
                     <li>
                         <a href="/admin/profile"
-                            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition {{ request()->is('admin/profile') ? 'bg-teal-500' : '' }}">
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 {{ request()->is('admin/profile') ? 'bg-teal-500' : '' }}">
                             <i class="fas fa-circle-info w-5"></i>
                             <span>Tentang Kami</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/produk"
-                            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition {{ request()->is('admin/banner') ? 'bg-teal-500 text-gray-900' : '' }}">
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 {{ request()->is('admin/banner') ? 'bg-teal-500 text-gray-900' : '' }}">
                             <i class="fas fa-bowl-food"></i>
                             <span>Nutrisi Produk</span>
                         </a>
