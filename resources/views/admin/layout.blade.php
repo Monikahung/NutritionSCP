@@ -108,6 +108,11 @@
             </main>
 
         </div> --}}
+        <div class="flex-1 p-8 overflow-y-auto">
+
+            @yield('content')
+        
+        </div>
     </div>
 
 </body>
