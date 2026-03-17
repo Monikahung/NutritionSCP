@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriCare - Beranda</title>
 
+    <!-- Tailwind -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="font-jakarta-sans antialiased text-jetblack bg-white flex flex-col min-h-screen">
@@ -33,20 +35,19 @@
 
     @yield('content')
 
-
-    <footer class="bg-white py-16 px-6 lg:px-12 border-t border-gray-200 shrink-0">
+    <footer class="bg-tealmist py-16 px-6 lg:px-12 border-t border-gray-200 shrink-0">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="flex flex-col gap-5">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-tealmist"></div>
-                    <span class="text-2xl font-bold tracking-tight text-jetblack">NutriCare</span>
+                    <div class="w-8 h-8 bg-jetblack"></div>
+                    <span class="text-2xl font-bold tracking-tight text-white">NutriCare</span>
                 </div>
-                <p class="text-jetblack/80 font-medium leading-relaxed max-w-sm">
+                <p class="text-white/80 font-medium leading-relaxed max-w-sm">
                     Platform edukasi nutrisi yang membantu masyarakat memahami kandungan gizi pada produk makanan dan minuman kemasan.
                 </p>
             </div>
 
-            <div class="flex flex-col gap-4 font-semibold text-jetblack">
+            <div class="flex flex-col gap-4 font-semibold text-white">
                 <a href="#" class="hover:text-tealmist transition duration-200 w-fit">Beranda</a>
                 <a href="#" class="hover:text-tealmist transition duration-200 w-fit">Tentang Kami</a>
                 <a href="#" class="hover:text-tealmist transition duration-200 w-fit">Nutrisi Produk</a>
@@ -55,10 +56,10 @@
             </div>
 
             <div class="flex gap-4 md:justify-end">
-                <a href="#" class="w-10 h-10 bg-tealmist hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
-                <a href="#" class="w-10 h-10 bg-tealmist hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
-                <a href="#" class="w-10 h-10 bg-tealmist hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
-                <a href="#" class="w-10 h-10 bg-tealmist hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
             </div>
         </div>
     </footer>
