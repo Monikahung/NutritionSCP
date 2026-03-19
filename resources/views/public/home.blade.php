@@ -15,10 +15,11 @@
                     </p>
                 </div>
                 <div class="w-full flex justify-end">
-                    <div class="bg-[#F4F5F6] w-full max-w-[500px] aspect-square flex flex-col items-center justify-center shadow-sm rounded-2xl">
-                        <h2 class="text-4xl lg:text-5xl font-semibold text-jetblack text-center leading-tight">
-                            Ilustrasi<br>Banner
-                        </h2>
+                    <div class="w-full max-w-6xl  rounded-2xl overflow-hidden">
+                        <img 
+                        src="{{ asset('gambar/banner2.png') }}" 
+                        alt="Banner NutriCare - Kenali Nutrisi Produk" 
+                        class="w-full h-auto block">
                     </div>
                 </div>
             </div>
@@ -140,10 +141,10 @@
         <section id="kalkulator" class="w-full bg-[#F8F9FA] py-20 px-6 lg:px-16 flex items-center">
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 <div class="w-full flex justify-center lg:justify-start">
-                    <div class="bg-tealmist w-full max-w-[500px] aspect-square flex flex-col items-center justify-center shadow-sm p-8 rounded-2xl">
-                        <h2 class="text-4xl lg:text-5xl font-semibold text-white text-center leading-tight">
-                            Ilustrasi<br>Kalkulator
-                        </h2>
+                    <div class="w-full max-w-[500px] aspect-square  rounded-2xl overflow-hidden "> <img 
+                        src="{{ asset('gambar/nutrition-calculator.png') }}" 
+                        alt="Illustrasi Kalkulator Nutrisi NutriCare" 
+                        class="w-full h-full object-cover">
                     </div>
                 </div>
 
