@@ -56,10 +56,18 @@
             </div>
 
             <div class="flex gap-4 md:justify-end">
-                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
-                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
-                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
-                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white"></a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white rounded-lg">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white rounded-lg">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white rounded-lg">
+                    <i class="fa-brands fa-facebook-f text-xl"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-jetblack hover:bg-tealmist/80 transition duration-200 flex items-center justify-center text-white rounded-lg">
+                    <i class="fa-brands fa-youtube text-xl"></i>
+                </a>
             </div>
         </div>
     </footer>
