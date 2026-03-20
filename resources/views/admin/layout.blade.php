@@ -29,9 +29,10 @@
             <div class="p-6 border-b border-teal-600 relative">
 
                 <div class="flex items-center gap-3">
-                    <div
-                        class="w-10 h-10 bg-white rounded-md flex items-center justify-center text-teal-700 font-bold text-2xl">
-                        N
+                    {{-- Logo --}}
+                    <div class="w-8.5 h-8.5">
+                        <img src="{{ asset('img/favicon.png') }}" alt="Logo NutriCare"
+                            class="w-full h-full object-cover">
                     </div>
                     <span class="text-xl font-bold">NutriCare</span>
                 </div>
@@ -71,14 +72,14 @@
                             Nutrisi Produk
                         </a>
                     </li>
-
-                    <li>
+                    {{-- Artikel --}}
+                    {{-- <li>
                         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition
                         {{ request()->is('admin/articles*') ? 'bg-teal-500' : '' }}">
                             <i class="fas fa-newspaper w-5"></i>
                             Artikel
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
 
@@ -121,7 +122,7 @@
 
 
             <!-- Desktop Headbar -->
-            <header class="hidden md:flex items-center justify-between bg-white shadow px-8 py-6">
+            <header class="hidden md:flex items-center justify-between bg-white shadow px-8 py-4">
 
                 <div>
                     <h2 class="text-3xl font-bold text-gray-800 py-2">
