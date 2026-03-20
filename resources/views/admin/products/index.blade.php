@@ -5,9 +5,11 @@
 @section('content')
     <div class="p-6 lg:p-8">
 
-        <!-- SEARCH -->
+        <!-- SEARCH + FILTER -->
         <form method="GET" class="mb-6">
-            <div class="flex gap-2">
+            <div class="flex gap-2 items-center">
+
+                <!-- SEARCH -->
                 <div class="relative flex-1">
                     <input type="text" name="q" value="{{ request('q') }}" placeholder="Pencarian..."
                         class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-tealMist text-sm shadow-sm">
@@ -20,41 +22,63 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="grade" value="{{ request('grade') }}">
+                <!-- FILTER DROPDOWN -->
+                <div class="relative" id="gradeDropdown">
+
+                    <!-- BUTTON -->
+                    <button type="button" onclick="toggleDropdown()"
+                        class="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm">
+
+                        <span id="selectedBadge"
+                            class="w-6 h-6 flex items-center justify-center rounded-full text-white text-xs font-bold"
+                            style="background:#6ea89e">
+                            ★
+                        </span>
+
+                        <span id="selectedText">Semua</span>
+                    </button>
+
+                    <!-- DROPDOWN -->
+                    <div id="dropdownMenu"
+                        class="hidden absolute mt-2 w-48 bg-white border rounded-xl shadow-lg overflow-hidden z-50">
+
+                        @php
+                            $grades = [
+                                ['value' => '', 'label' => 'Semua', 'color' => '#6ea89e', 'icon' => '★'],
+                                ['value' => 'a', 'label' => 'A - Sangat Sesuai', 'color' => '#6ea89e', 'icon' => 'A'],
+                                ['value' => 'b', 'label' => 'B - Sesuai', 'color' => '#a6d2c8', 'icon' => 'B'],
+                                ['value' => 'c', 'label' => 'C - Sedang', 'color' => '#fbbf24', 'icon' => 'C'],
+                                ['value' => 'd', 'label' => 'D - Kurang', 'color' => '#f97316', 'icon' => 'D'],
+                                ['value' => 'e', 'label' => 'E - Buruk', 'color' => '#dc2626', 'icon' => 'E'],
+                            ];
+                        @endphp
+
+                        @foreach($grades as $g)
+                            <div onclick="selectGrade('{{ $g['value'] }}', '{{ $g['label'] }}', '{{ $g['color'] }}', '{{ $g['icon'] }}')"
+                                class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+
+                                <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-xs font-bold"
+                                    style="background: {{ $g['color'] }}">
+                                    {{ $g['icon'] }}
+                                </span>
+
+                                <span class="text-sm">{{ $g['label'] }}</span>
+                            </div>
+                        @endforeach
+
+                    </div>
+
+                    <!-- HIDDEN INPUT -->
+                    <input type="hidden" name="grade" id="gradeInput" value="{{ request('grade') }}">
+
+                </div>
 
                 <button type="submit" class="bg-tealMist text-white px-6 py-3 rounded-xl text-sm font-semibold">
                     Cari
                 </button>
+
             </div>
         </form>
-
-        <!-- FILTER -->
-        @php
-            $grades = [
-                ['value' => '', 'label' => 'Semua', 'bg' => '#6ea89e', 'icon' => '★'],
-                ['value' => 'a', 'label' => 'Sangat Sesuai', 'bg' => '#6ea89e', 'icon' => 'A'],
-                ['value' => 'b', 'label' => 'Sesuai', 'bg' => '#a6d2c8', 'icon' => 'B'],
-                ['value' => 'e', 'label' => 'Buruk', 'bg' => '#dc2626', 'icon' => 'E'],
-            ];
-        @endphp
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
-            @foreach($grades as $g)
-                <a href="?grade={{ $g['value'] }}&q={{ request('q') }}"
-                    class="bg-white p-4 rounded-xl text-center border transition
-                                                        {{ request('grade') == $g['value'] ? 'border-tealMist shadow-md' : 'border-gray-200' }}">
-
-                    <div class="w-12 h-12 mx-auto rounded-lg flex items-center justify-center text-white font-bold"
-                        style="background: {{ $g['bg'] }}">
-                        {{ $g['icon'] }}
-                    </div>
-
-                    <div class="text-xs mt-2 font-medium text-gray-600">
-                        {{ $g['label'] }}
-                    </div>
-                </a>
-            @endforeach
-        </div>
 
         <!-- GRID -->
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
@@ -116,8 +140,15 @@
                     e: 'Buruk'
                 };
 
-                // 🔥 FILTER HILANGKAN UNKNOWN
-                const products = data.products;
+                let products = data.products;
+
+                const selectedGrade = new URLSearchParams(window.location.search).get('grade');
+
+                if (selectedGrade) {
+                    products = products.filter(p =>
+                        p.nutrition_grades?.toLowerCase() === selectedGrade.toLowerCase()
+                    );
+                }
 
                 if (!products || products.length === 0) {
                     grid.innerHTML = `<div class="col-span-3 text-center py-20">Tidak ada produk</div>`;
@@ -129,55 +160,55 @@
                     const grade = (product.nutrition_grades || '').toLowerCase();
 
                     if (!grade || grade === 'unknown') return;
+
                     const color = gradeColors[grade] ?? '#6b7280';
 
                     const card = `
-                                <div class="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition">
+                            <div class="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition">
 
-                                    <div class="relative">
+                                <div class="relative">
 
-                                        <div class="bg-gray-200 aspect-square">
-                                            ${product.image_url
+                                    <div class="bg-gray-200 aspect-square">
+                                        ${product.image_url
                             ? `<img src="${product.image_url}" class="w-full h-full object-cover">`
                             : `<div class="flex items-center justify-center h-full text-gray-400">No Image</div>`
                         }
-                                        </div>
+                                    </div>
 
-                                        ${grade ? `
-                                        <div class="absolute top-3 left-3 flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow border border-white text-xs font-semibold">
+                                    <!-- BADGE -->
+                                    <div class="absolute top-3 left-3 flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow border border-white text-xs font-semibold">
 
-                                            <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-[10px] font-bold border border-white"
-                                                style="background:${color}">
-                                                ${grade.toUpperCase()}
-                                            </span>
+                                        <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-[10px] font-bold"
+                                            style="background:${color}">
+                                            ${grade.toUpperCase()}
+                                        </span>
 
-                                            <span style="color:${color}; text-shadow: 0 0 2px white;">
-                                                ${gradeLabels[grade] || ''}
-                                            </span>
-
-                                        </div>
-                                        ` : ''}
+                                        <span style="color:${color}">
+                                            ${gradeLabels[grade]}
+                                        </span>
 
                                     </div>
 
-                                    <div class="p-4">
-                                        <h3 class="text-sm font-semibold text-center line-clamp-2">
-                                            ${product.product_name}
-                                        </h3>
+                                </div>
 
-                                        ${product.brands
+                                <div class="p-4">
+                                    <h3 class="text-sm font-semibold text-center line-clamp-2">
+                                        ${product.product_name}
+                                    </h3>
+
+                                    ${product.brands
                             ? `<p class="text-gray-400 text-xs text-center mb-3">${product.brands}</p>`
                             : ''
                         }
 
-                                        <a href="/admin/produk/${product.code}"
-                                            class="block text-center bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm">
-                                            Lihat Detail
-                                        </a>
-                                    </div>
-
+                                    <a href="/admin/produk/${product.code}"
+                                        class="block text-center bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm">
+                                        Lihat Detail
+                                    </a>
                                 </div>
-                                `;
+
+                            </div>
+                        `;
 
                     grid.insertAdjacentHTML('beforeend', card);
                 });
@@ -190,29 +221,29 @@
 
                 if (page > 1) {
                     pagination.innerHTML += `
-                                    <button onclick="loadProducts(${page - 1})"
-                                        class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
-                                        Prev
-                                    </button>`;
+                            <button onclick="loadProducts(${page - 1})"
+                                class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
+                                Prev
+                            </button>`;
                 }
 
                 for (let i = start; i <= end; i++) {
                     pagination.innerHTML += `
-                                    <button onclick="loadProducts(${i})"
-                                        class="px-4 py-2 rounded-lg font-medium transition
-                                        ${i === page
+                            <button onclick="loadProducts(${i})"
+                                class="px-4 py-2 rounded-lg font-medium
+                                ${i === page
                             ? 'bg-tealMist text-white shadow-md'
                             : 'bg-white border border-gray-300 text-gray-700 hover:bg-tealMist hover:text-white'}">
-                                        ${i}
-                                    </button>`;
+                                ${i}
+                            </button>`;
                 }
 
                 if (page < totalPages) {
                     pagination.innerHTML += `
-                                    <button onclick="loadProducts(${page + 1})"
-                                        class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
-                                        Next
-                                    </button>`;
+                            <button onclick="loadProducts(${page + 1})"
+                                class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
+                                Next
+                            </button>`;
                 }
 
             } catch (err) {
@@ -221,6 +252,23 @@
             }
 
             loading.classList.add('hidden');
+        }
+
+        function toggleDropdown() {
+            document.getElementById('dropdownMenu').classList.toggle('hidden');
+        }
+
+        function selectGrade(value, label, color, icon) {
+
+            document.getElementById('gradeInput').value = value;
+
+            document.getElementById('selectedText').innerText = label;
+
+            const badge = document.getElementById('selectedBadge');
+            badge.innerText = icon;
+            badge.style.background = color;
+
+            document.getElementById('dropdownMenu').classList.add('hidden');
         }
 
         // INIT
