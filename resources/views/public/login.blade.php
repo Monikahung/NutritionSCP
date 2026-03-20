@@ -12,14 +12,26 @@
                     berbagai fitur yang telah
                     kami sediakan!</p>
 
-                <form action="#" method="POST" class="space-y-4">
+                @if(session('success'))
+                    <p style="color: green;">{{ session('success') }}</p>
+                @endif
+
+                @if($errors->any())
+                    <ul style="color:red;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+
+                <form action="{{ route('login.submit') }}" method="POST" class="space-y-4">
                     @csrf
 
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-jetblack/60">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input type="text" name="username" placeholder="Username"
+                        <input type="email" name="email" placeholder="Email"
                             class="w-full bg-jetblack/10 py-4 pl-12 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-jetblack/30">
                     </div>
 
@@ -45,7 +57,8 @@
                 </form>
 
                 <p class="mt-4 text-center text-sm text-jetblack">
-                    Belum punya akun? <a href="#" class="underline font-semibold text-jetblack hover:text-jetblack/80">Registrasi Sekarang!</a>
+                    Belum punya akun? <a href="#"
+                        class="underline font-semibold text-jetblack hover:text-jetblack/80">Registrasi Sekarang!</a>
                 </p>
             </div>
 

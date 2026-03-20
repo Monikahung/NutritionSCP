@@ -13,6 +13,9 @@ Route::get('/', [HomePublicController::class, 'showHome'])->name('homepublic');
 // Route login for view login page
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
+// Route login for handle login request
+Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.submit');
+
 Route::get('/admin/api/products', [NutritionProductController::class, 'api']);
 Route::get('/admin', [HomeAdminController::class, 'index'])->name('dashboardadmin');
 Route::get('/admin/aboutus', [AboutUsController::class, 'index'])->name('aboutus');
