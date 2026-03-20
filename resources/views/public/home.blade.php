@@ -1,5 +1,7 @@
 @extends('public.layout')
 
+@section('title', 'Beranda')
+
 @section('content')
 
     <main class="grow">

@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriCare - Beranda</title>
+    <title>NutriCare - @yield('title')</title>
 
     <!-- Tailwind -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    {{-- Alpine.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     {{-- Favicon --}}
     <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
@@ -19,7 +22,7 @@
 <body id="home" class="font-jakarta-sans antialiased text-jetblack bg-softivory flex flex-col min-h-screen">
 
     {{-- Header --}}
-    <header class="flex items-center justify-between px-6 py-4 bg-softivory lg:px-12 shadow-sm shrink-0">
+    <header class="flex items-center justify-between px-6 py-4 bg-softivory lg:px-12 shadow-lg shadow-jetblack/10 shrink-0 relative z-10">
         <div class="flex items-center gap-3">
             {{-- Logo --}}
             <div class="w-8.5 h-8.5">
@@ -32,15 +35,15 @@
 
         {{-- Top Navigation --}}
         <nav class="hidden md:flex items-center gap-12 font-semibold text-jetblack">
-            <a href="#home" class="text-lg hover:text-tealmist transition duration-200">Beranda</a>
-            <a href="#about-us" class="text-lg hover:text-tealmist transition duration-200">Tentang Kami</a>
-            <a href="#nutrition-products" class="text-lg hover:text-tealmist transition duration-200">Nutrisi Produk</a>
-            <a href="#nutrition-calculator" class="text-lg hover:text-tealmist transition duration-200">Kalkulator</a>
+            <a href="{{ route('homepublic') }}#home" class="text-lg hover:text-tealmist transition duration-200">Beranda</a>
+            <a href="{{ route('homepublic') }}#about-us" class="text-lg hover:text-tealmist transition duration-200">Tentang Kami</a>
+            <a href="{{ route('homepublic') }}#nutrition-products" class="text-lg hover:text-tealmist transition duration-200">Nutrisi Produk</a>
+            <a href="{{ route('homepublic') }}#nutrition-calculator" class="text-lg hover:text-tealmist transition duration-200">Kalkulator</a>
         </nav>
 
         {{-- Auth Buttons --}}
         <div>
-            <a href="#"
+            <a href="{{ route('login') }}"
                 class="bg-tealmist hover:bg-tealmist/80 text-softivory px-2.5 py-2.5 flex flex-col items-center justify-center transition duration-200 rounded-md">
                 <i class="fa-solid fa-right-to-bracket"></i>
             </a>
@@ -73,19 +76,19 @@
             {{-- Footer Navigation --}}
             <div class="flex md:justify-center w-full">
                 <div class="flex flex-col gap-4 font-semibold text-jetblack min-w-fit">
-                    <a href="#home" class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Beranda</a>
-                    <a href="#about-us" class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Tentang
+                    <a href="{{ route('homepublic') }}#home" class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Beranda</a>
+                    <a href="{{ route('homepublic') }}#about-us" class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Tentang
                         Kami</a>
-                    <a href="#nutrition-products"
+                    <a href="{{ route('homepublic') }}#nutrition-products"
                         class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Nutrisi
                         Produk</a>
-                    <a href="#nutrition-calculator"
+                    <a href="{{ route('homepublic') }}#nutrition-calculator"
                         class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Kalkulator</a>
                 </div>
             </div>
 
             {{-- Social Media Links --}}
-            <div class="flex gap-4 md:justify-end">
+            <div class="flex gap-4 md:justify-end ">
                 <a href="mailto:nutricare@gmail.com"
                     class="w-10 h-10 bg-softivory hover:bg-softivory/60 transition duration-200 flex items-center justify-center text-tealmist rounded-lg border border-aquabreeze">
                     <i class="fa-solid fa-envelope text-xl"></i>

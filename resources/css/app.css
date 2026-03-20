@@ -8,6 +8,7 @@
 @source '../**/*.js';
 
 @theme {
+    /* Fonts */
     --font-sans:
         "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
@@ -22,8 +23,20 @@
     --color-aquabreeze: #a6d2c8;
 }
 
+/* Base Styles */
 @layer base {
+    /* Scroll Behavior */
     html {
         scroll-behavior: smooth;
+    }
+
+    /* Hide password reveal button */
+    input::-webkit-reveal,
+    input::-webkit-password-safety-button {
+        display: none !important;
+    }
+
+    input::-ms-reveal {
+        display: none !important;
     }
 }

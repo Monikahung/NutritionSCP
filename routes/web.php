@@ -5,9 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\NutritionProductController;
 use App\Http\Controllers\Public\HomePublicController;
+use App\Http\Controllers\Public\LoginController;
 
-// Route homepublic menampilkan home public
-Route::get('/', [HomePublicController::class, 'HomePublic'])->name('homepublic');
+// Route homepublic for view home public page
+Route::get('/', [HomePublicController::class, 'showHome'])->name('homepublic');
+
+// Route login for view login page
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::get('/admin/api/products', [NutritionProductController::class, 'api']);
 Route::get('/admin', [HomeAdminController::class, 'index'])->name('dashboardadmin');
