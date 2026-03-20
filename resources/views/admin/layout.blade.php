@@ -71,14 +71,14 @@
                             Nutrisi Produk
                         </a>
                     </li>
-
-                    <li>
+                    {{-- Artikel --}}
+                    {{-- <li>
                         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition
                         {{ request()->is('admin/articles*') ? 'bg-teal-500' : '' }}">
                             <i class="fas fa-newspaper w-5"></i>
                             Artikel
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
 
