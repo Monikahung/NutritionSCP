@@ -21,24 +21,13 @@ class OpenFoodFactsService
                 'search_simple' => 1,
                 'action'        => 'process',
                 'page'          => $page,
-                'page_size'     => $pageSize,
+                'page_size' => 100,
                 'json'          => 1,
                 'fields'        => 'code,product_name,brands,categories,image_url,image_front_url,image_small_url,nutrition_grades,nutriments,ingredients_text,serving_size,nutriscore_score,nutriscore_grade'
             ];
 
-            // Filter grade hanya jika ada
-            if (!empty($grade)) {
-                $params['tagtype_0'] = 'nutrition_grades';
-                $params['tag_contains_0'] = 'contains';
-                $params['tag_0'] = $grade;
-            }
-
-            $response = Http::withHeaders([
-                'User-Agent' => config('app.name') . '/1.0'
-            ])
-                ->timeout(20)
-                ->retry(2, 200)
-                ->get($this->baseUrl . '/cgi/search.pl', $params);
+            // ✅ SATU request saja
+            $response = Http::timeout(30)->get($this->baseUrl . '/cgi/search.pl', $params);
 
             if (!$response->successful()) {
                 return [
@@ -49,6 +38,13 @@ class OpenFoodFactsService
 
             $data = $response->json();
 
+            if (!$data || !isset($data['products'])) {
+                return [
+                    'products' => [],
+                    'totalPages' => 1
+                ];
+            }
+
             if (!isset($data['products'])) {
                 return [
                     'products' => [],
@@ -56,9 +52,18 @@ class OpenFoodFactsService
                 ];
             }
 
+            // mapping
             $products = array_values(array_filter(
                 array_map([$this, 'mapProduct'], $data['products'])
             ));
+
+            // ✅ filter di Laravel (AMAN)
+            if (!empty($grade)) {
+                $products = array_values(array_filter($products, function ($p) use ($grade) {
+                    return isset($p['nutrition_grades']) &&
+                        strtolower($p['nutrition_grades']) === strtolower($grade);
+                }));
+            }
 
             return [
                 'products' => $products,
@@ -104,7 +109,7 @@ class OpenFoodFactsService
 
     private function mapProduct(array $p): ?array
     {
-        $name = trim($p['product_name'] ?? '');
+        $name = trim($p['product_name'] ?? '') ?: 'Produk Tanpa Nama';
 
         if (!$name) {
             return null;
