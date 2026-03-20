@@ -269,6 +269,17 @@
             badge.style.background = color;
 
             document.getElementById('dropdownMenu').classList.add('hidden');
+
+            // Reload products dengan filter grade yang baru
+            currentPage = 1;
+            const params = new URLSearchParams(window.location.search);
+            params.set('grade', value);
+            params.set('page', 1);
+            
+            const newUrl = window.location.pathname + '?' + params.toString();
+            window.history.pushState({}, '', newUrl);
+            
+            loadProducts(1);
         }
 
         // INIT
