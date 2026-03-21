@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'NutriCare - Admin')</title>
 
-    <!-- Tailwind -->
+    {{-- Tailwind --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- FontAwesome -->
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    {{-- Favicon --}}
+    <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
 </head>
 
 <body class="font-jakarta-sans bg-gray-100">
@@ -72,14 +75,6 @@
                             Nutrisi Produk
                         </a>
                     </li>
-                    {{-- Artikel --}}
-                    {{-- <li>
-                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-teal-600 transition
-                        {{ request()->is('admin/articles*') ? 'bg-teal-500' : '' }}">
-                            <i class="fas fa-newspaper w-5"></i>
-                            Artikel
-                        </a>
-                    </li> --}}
 
                 </ul>
 
@@ -130,16 +125,6 @@
                     </h2>
                 </div>
 
-                {{-- <div class="flex items-center gap-5">
-
-                    <i class="fas fa-bell text-gray-500"></i>
-
-                    <div class="w-9 h-9 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold">
-                        A
-                    </div>
-
-                </div> --}}
-
             </header>
 
 
@@ -154,19 +139,65 @@
 
     </div>
 
+    <div id="success-alert"
+        class="fixed top-5 right-5 z-9999 max-w-md w-full transition-all duration-500 ease-in-out transform -translate-y-25 opacity-0">
+        <div
+            class="bg-white border-l-4 shadow-2xl rounded-r-lg p-4 flex items-center justify-between border border-gray-100">
+            <div class="flex items-center">
+                <div class="shrink-0 bg-teal-100 w-10 h-10 flex items-center justify-center rounded-full">
+                    <i class="fas fa-check text-teal-700"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-bold text-jetblack">Berhasil!</p>
+                    <p class="text-xs text-jetblack" id="alert-message"></p>
+                </div>
+            </div>
+            <button onclick="closeAlert()" class="ml-4 text-jetblack hover:text-jetblack/80 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <script>
 
+        // Sidebar Toggle Open
         function openSidebar() {
             document.getElementById('sidebar').classList.remove('-translate-x-full');
             document.getElementById('sidebar-overlay').classList.remove('hidden');
         }
 
+        // Sidebar Toggle Close
         function closeSidebar() {
             document.getElementById('sidebar').classList.add('-translate-x-full');
             document.getElementById('sidebar-overlay').classList.add('hidden');
         }
 
+        // Alert Success Toggle
+        function closeAlert() {
+            const alert = document.getElementById('success-alert');
+            alert.classList.add('translate-y-[-100px]', 'opacity-0');
+            setTimeout(() => { alert.classList.add('hidden'); }, 500);
+        }
+
+        // Show Alert on Session Success
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('success'))
+                const alertElement = document.getElementById('success-alert');
+                const messageElement = document.getElementById('alert-message');
+
+                messageElement.innerText = "{{ session('success') }}";
+
+                alertElement.classList.remove('hidden');
+                setTimeout(() => {
+                    alertElement.classList.remove('translate-y-[-100px]', 'opacity-0');
+                    alertElement.classList.add('translate-y-0', 'opacity-100');
+                }, 100);
+
+                setTimeout(() => {
+                    closeAlert();
+                }, 5000);
+            @endif
+        });
     </script>
 
 </body>
