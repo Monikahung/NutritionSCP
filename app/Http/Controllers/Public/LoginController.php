@@ -35,6 +35,6 @@ class LoginController extends Controller
         }
 
         // If not admin, redirect back with error message
-        return back()->withErrors(['email' => 'Akun tidak terdaftar!'])->withInput();
+        return back()->withErrors(['login_error' => 'Akun tidak terdaftar!'])->withInput();
     }
 }
