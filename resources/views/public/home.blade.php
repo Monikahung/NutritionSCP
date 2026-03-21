@@ -17,8 +17,7 @@
                     </h1>
                     {{-- Hero Description --}}
                     <p class="text-lg lg:text-xl leading-relaxed text-jetblack font-medium w-full lg:w-11/12">
-                        Pelajari kandungan gizi pada produk makanan kemasan, gunakan kalkulator nutrisi, dan temukan
-                        berbagai artikel untuk membantu Anda membuat pilihan makanan yang lebih sehat.
+                        Pelajari kandungan gizi pada produk makanan kemasan dan gunakan kalkulator nutrisi untuk membantu Anda membuat pilihan makanan yang lebih sehat.
                     </p>
                 </div>
                 <div class="w-full flex justify-end">
@@ -43,7 +42,7 @@
                 </div>
 
                 {{-- About Us Content --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 lg:mr-36 lg:ml-36">
                     {{-- Info Nutrisi Produk --}}
                     <div
                         class="bg-tealmist p-10 flex flex-col items-center justify-center text-center gap-4 min-h-55 rounded-2xl">
@@ -59,15 +58,6 @@
                         <h3 class="text-xl font-bold text-jetblack">Kalkulator Nutrisi</h3>
                         <p class="text-jetblack font-medium leading-relaxed">
                             Membantu menghitung estimasi kandungan gizi dari produk kemasan yang dikonsumsi
-                        </p>
-                    </div>
-
-                    {{-- Artikel Seputar Nutrisi --}}
-                    <div
-                        class="bg-tealmist p-10 flex flex-col items-center justify-center text-center gap-4 min-h-55 rounded-2xl">
-                        <h3 class="text-xl font-bold text-jetblack">Artikel Seputar Nutrisi</h3>
-                        <p class="text-jetblack font-medium leading-relaxed">
-                            Tersedia berbagai artikel informatif seputar gizi, nutrisi, serta pola makan sehat dan bergizi
                         </p>
                     </div>
                 </div>
