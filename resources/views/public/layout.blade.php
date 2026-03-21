@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriCare - @yield('title')</title>
 
-    <!-- Tailwind -->
+    {{-- Tailwind --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Font Awesome --}}
@@ -17,12 +17,18 @@
 
     {{-- Favicon --}}
     <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
+
+    {{-- Cache Control --}}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 
 <body id="home" class="font-jakarta-sans antialiased text-jetblack bg-softivory flex flex-col min-h-screen">
 
     {{-- Header --}}
-    <header class="flex items-center justify-between px-6 py-4 bg-softivory lg:px-12 shadow-lg shadow-jetblack/10 shrink-0 relative z-10">
+    <header
+        class="flex items-center justify-between px-6 py-4 bg-softivory lg:px-12 shadow-lg shadow-jetblack/10 shrink-0 relative z-10">
         <div class="flex items-center gap-3">
             {{-- Logo --}}
             <div class="w-8.5 h-8.5">
@@ -35,10 +41,14 @@
 
         {{-- Top Navigation --}}
         <nav class="hidden md:flex items-center gap-12 font-semibold text-jetblack">
-            <a href="{{ route('homepublic') }}#home" class="text-lg hover:text-tealmist transition duration-200">Beranda</a>
-            <a href="{{ route('homepublic') }}#about-us" class="text-lg hover:text-tealmist transition duration-200">Tentang Kami</a>
-            <a href="{{ route('homepublic') }}#nutrition-products" class="text-lg hover:text-tealmist transition duration-200">Nutrisi Produk</a>
-            <a href="{{ route('homepublic') }}#nutrition-calculator" class="text-lg hover:text-tealmist transition duration-200">Kalkulator</a>
+            <a href="{{ route('homepublic') }}#home"
+                class="text-lg hover:text-tealmist transition duration-200">Beranda</a>
+            <a href="{{ route('homepublic') }}#about-us"
+                class="text-lg hover:text-tealmist transition duration-200">Tentang Kami</a>
+            <a href="{{ route('homepublic') }}#nutrition-products"
+                class="text-lg hover:text-tealmist transition duration-200">Nutrisi Produk</a>
+            <a href="{{ route('homepublic') }}#nutrition-calculator"
+                class="text-lg hover:text-tealmist transition duration-200">Kalkulator</a>
         </nav>
 
         {{-- Auth Buttons --}}
@@ -76,8 +86,10 @@
             {{-- Footer Navigation --}}
             <div class="flex md:justify-center w-full">
                 <div class="flex flex-col gap-4 font-semibold text-jetblack min-w-fit">
-                    <a href="{{ route('homepublic') }}#home" class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Beranda</a>
-                    <a href="{{ route('homepublic') }}#about-us" class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Tentang
+                    <a href="{{ route('homepublic') }}#home"
+                        class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Beranda</a>
+                    <a href="{{ route('homepublic') }}#about-us"
+                        class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Tentang
                         Kami</a>
                     <a href="{{ route('homepublic') }}#nutrition-products"
                         class="text-lg hover:text-jetblack/60 transition duration-200 w-fit">Nutrisi
