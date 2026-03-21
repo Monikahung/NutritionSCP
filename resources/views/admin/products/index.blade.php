@@ -164,51 +164,51 @@
                     const color = gradeColors[grade] ?? '#6b7280';
 
                     const card = `
-                            <div class="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition">
+                                    <div class="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition">
 
-                                <div class="relative">
+                                        <div class="relative">
 
-                                    <div class="bg-gray-200 aspect-square">
-                                        ${product.image_url
+                                            <div class="bg-gray-200 aspect-square">
+                                                ${product.image_url
                             ? `<img src="${product.image_url}" class="w-full h-full object-cover">`
                             : `<div class="flex items-center justify-center h-full text-gray-400">No Image</div>`
                         }
-                                    </div>
+                                            </div>
 
-                                    <!-- BADGE -->
-                                    <div class="absolute top-3 left-3 flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow border border-white text-xs font-semibold">
+                                            <!-- BADGE -->
+                                            <div class="absolute top-3 left-3 flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow border border-white text-xs font-semibold">
 
-                                        <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-[10px] font-bold"
-                                            style="background:${color}">
-                                            ${grade.toUpperCase()}
-                                        </span>
+                                                <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-[10px] font-bold"
+                                                    style="background:${color}">
+                                                    ${grade.toUpperCase()}
+                                                </span>
 
-                                        <span style="color:${color}">
-                                            ${gradeLabels[grade]}
-                                        </span>
+                                                <span style="color:${color}">
+                                                    ${gradeLabels[grade]}
+                                                </span>
 
-                                    </div>
+                                            </div>
 
-                                </div>
+                                        </div>
 
-                                <div class="p-4">
-                                    <h3 class="text-sm font-semibold text-center line-clamp-2">
-                                        ${product.product_name}
-                                    </h3>
+                                        <div class="p-4">
+                                            <h3 class="text-sm font-semibold text-center line-clamp-2">
+                                                ${product.product_name}
+                                            </h3>
 
-                                    ${product.brands
+                                            ${product.brands
                             ? `<p class="text-gray-400 text-xs text-center mb-3">${product.brands}</p>`
                             : ''
                         }
 
-                                    <a href="/admin/produk/${product.code}"
-                                        class="block text-center bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm">
-                                        Lihat Detail
-                                    </a>
-                                </div>
+                                            <a href="/admin/produk/${product.code}"
+                                                class="block text-center bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm">
+                                                Lihat Detail
+                                            </a>
+                                        </div>
 
-                            </div>
-                        `;
+                                    </div>
+                                `;
 
                     grid.insertAdjacentHTML('beforeend', card);
                 });
@@ -221,29 +221,29 @@
 
                 if (page > 1) {
                     pagination.innerHTML += `
-                            <button onclick="loadProducts(${page - 1})"
-                                class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
-                                Prev
-                            </button>`;
+                                    <button onclick="loadProducts(${page - 1})"
+                                        class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
+                                        Prev
+                                    </button>`;
                 }
 
                 for (let i = start; i <= end; i++) {
                     pagination.innerHTML += `
-                            <button onclick="loadProducts(${i})"
-                                class="px-4 py-2 rounded-lg font-medium
-                                ${i === page
+                                    <button onclick="loadProducts(${i})"
+                                        class="px-4 py-2 rounded-lg font-medium
+                                        ${i === page
                             ? 'bg-tealMist text-white shadow-md'
                             : 'bg-white border border-gray-300 text-gray-700 hover:bg-tealMist hover:text-white'}">
-                                ${i}
-                            </button>`;
+                                        ${i}
+                                    </button>`;
                 }
 
                 if (page < totalPages) {
                     pagination.innerHTML += `
-                            <button onclick="loadProducts(${page + 1})"
-                                class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
-                                Next
-                            </button>`;
+                                    <button onclick="loadProducts(${page + 1})"
+                                        class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
+                                        Next
+                                    </button>`;
                 }
 
             } catch (err) {
@@ -261,7 +261,6 @@
         function selectGrade(value, label, color, icon) {
 
             document.getElementById('gradeInput').value = value;
-
             document.getElementById('selectedText').innerText = label;
 
             const badge = document.getElementById('selectedBadge');
@@ -270,15 +269,28 @@
 
             document.getElementById('dropdownMenu').classList.add('hidden');
 
-            // Reload products dengan filter grade yang baru
+            // ✅ UX FEEDBACK LANGSUNG
+            const grid = document.getElementById('productGrid');
+            const loading = document.getElementById('loading');
+
+            grid.innerHTML = '';
+            loading.classList.remove('hidden');
+
+            // logic filter
             currentPage = 1;
             const params = new URLSearchParams(window.location.search);
-            params.set('grade', value);
+
+            if (value === '') {
+                params.delete('grade');
+            } else {
+                params.set('grade', value);
+            }
+
             params.set('page', 1);
-            
+
             const newUrl = window.location.pathname + '?' + params.toString();
             window.history.pushState({}, '', newUrl);
-            
+
             loadProducts(1);
         }
 
