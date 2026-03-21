@@ -57,7 +57,33 @@ class OpenFoodFactsService
                 array_map([$this, 'mapProduct'], $data['products'])
             ));
 
-            // ✅ filter di Laravel (AMAN)
+            // Jika ada query (dari search?), beri filter lebih ketat untuk brand/kategori/nama
+            if (!empty($query)) {
+                $searchLower = strtolower(trim($query));
+
+                $products = array_values(array_filter($products, function ($p) use ($searchLower) {
+                    if (!$p) {
+                        return false;
+                    }
+
+                    $nameMatch = str_contains(strtolower($p['product_name'] ?? ''), $searchLower);
+                    $brandMatch = str_contains(strtolower($p['brands'] ?? ''), $searchLower);
+
+                    $categoryMatch = false;
+                    if (!empty($p['categories']) && is_array($p['categories'])) {
+                        foreach ($p['categories'] as $cat) {
+                            if (str_contains(strtolower($cat), $searchLower)) {
+                                $categoryMatch = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return $nameMatch || $brandMatch || $categoryMatch;
+                }));
+            }
+
+            // ✅ filter di Laravel (AMAN) berdasarkan grade
             if (!empty($grade)) {
                 $products = array_values(array_filter($products, function ($p) use ($grade) {
                     return isset($p['nutrition_grades']) &&

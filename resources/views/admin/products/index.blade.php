@@ -6,13 +6,14 @@
     <div class="p-6 lg:p-8">
 
         <!-- SEARCH + FILTER -->
-        <form method="GET" class="mb-6">
+        <form method="GET" class="mb-6" onsubmit="event.preventDefault(); triggerSearch();">
             <div class="flex gap-2 items-center">
 
                 <!-- SEARCH -->
                 <div class="relative flex-1">
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Pencarian..."
-                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-tealMist text-sm shadow-sm">
+                    <input id="searchInput" type="text" name="q" value="{{ request('q') }}" placeholder="Pencarian..."
+                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-tealMist text-sm shadow-sm"
+                        onkeyup="handleSearchInput();">
 
                     <div class="absolute left-4 top-1/2 -translate-y-1/2">
                         <svg width="18" height="18" fill="none" stroke="#6ea89e" stroke-width="2" viewBox="0 0 24 24">
@@ -96,6 +97,30 @@
 
     <script>
         let currentPage = 1;
+        let searchDebounceTimer;
+
+        function triggerSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput ? searchInput.value.trim() : '';
+
+            const params = new URLSearchParams(window.location.search);
+
+            if (query !== '') {
+                params.set('q', query);
+            } else {
+                params.delete('q');
+            }
+
+            params.set('page', 1);
+
+            window.history.pushState({}, '', window.location.pathname + (params.toString() ? '?' + params.toString() : ''));
+            loadProducts(1);
+        }
+
+        function handleSearchInput() {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(triggerSearch, 450);
+        }
 
         async function loadProducts(page = 1) {
 
