@@ -73,7 +73,7 @@
 
                 </div>
 
-                <button type="submit" class="bg-tealMist text-white px-6 py-3 rounded-xl text-sm font-semibold">
+                <button type="submit" class="bg-tealmist text-white px-6 py-3 rounded-xl text-sm font-semibold">
                     Cari
                 </button>
 
