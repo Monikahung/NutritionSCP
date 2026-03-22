@@ -10,6 +10,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\HomeAdminController' => $baseDir . '/app/Http/Controllers/Admin/HomeAdminController.php',
     'App\\Http\\Controllers\\Admin\\NutritionProductController' => $baseDir . '/app/Http/Controllers/Admin/NutritionProductController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\Public\\HomePublicController' => $baseDir . '/app/Http/Controllers/Public/HomePublicController.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Services\\OpenFoodFactsService' => $baseDir . '/app/Services/OpenFoodFactsService.php',
