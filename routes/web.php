@@ -17,3 +17,8 @@ Route::get('/admin/aboutus',[AboutUsController::class,'index'])->name('aboutus')
 Route::get('/admin/produk',[NutritionProductController::class,'index'])->name('products.index');
 
 Route::get('/admin/produk/{code}',[NutritionProductController::class,'show'])->name('products.show');
+
+
+Route::get('/calculator', [HomePublicController::class, 'calculator']);
+Route::post('/calculator', [HomePublicController::class, 'calculate'])->name('calculate');
+Route::get('/search-products', [HomePublicController::class, 'search']);
