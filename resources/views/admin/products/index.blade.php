@@ -12,8 +12,7 @@
                 <!-- SEARCH -->
                 <div class="relative flex-1">
                     <input id="searchInput" type="text" name="q" value="{{ request('q') }}" placeholder="Pencarian..."
-                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-tealMist text-sm shadow-sm"
-                        onkeyup="handleSearchInput();">
+                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-tealMist text-sm shadow-sm">
 
                     <div class="absolute left-4 top-1/2 -translate-y-1/2">
                         <svg width="18" height="18" fill="none" stroke="#6ea89e" stroke-width="2" viewBox="0 0 24 24">
@@ -81,13 +80,19 @@
             </div>
         </form>
 
-        <!-- GRID -->
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        <!-- GRID WRAPPER -->
+        <div class="relative min-h-[320px]">
 
-        <!-- LOADING -->
-        <div id="loading" class="text-center py-10 hidden">
-            <div class="animate-spin w-8 h-8 border-4 border-gray-300 border-t-teal-500 rounded-full mx-auto"></div>
-            <p class="text-gray-400 mt-2 text-sm">Memuat produk...</p>
+            <!-- LOADING OVERLAY -->
+            <div id="loading" class="absolute inset-0 z-10 hidden items-center justify-center backdrop-blur-sm">
+                <div class="text-center">
+                    <div class="animate-spin w-8 h-8 border-4 border-gray-300 border-t-teal-500 rounded-full mx-auto"></div>
+                    <p class="text-gray-400 mt-2 text-sm">Memuat produk...</p>
+                </div>
+            </div>
+
+            <!-- GRID -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </div>
 
         <!-- PAGINATION -->
@@ -117,11 +122,6 @@
             loadProducts(1);
         }
 
-        function handleSearchInput() {
-            clearTimeout(searchDebounceTimer);
-            searchDebounceTimer = setTimeout(triggerSearch, 450);
-        }
-
         async function loadProducts(page = 1) {
 
             currentPage = page;
@@ -134,9 +134,11 @@
             const pagination = document.getElementById('pagination');
 
             loading.classList.remove('hidden');
+            loading.classList.add('flex');
 
             try {
-
+                grid.innerHTML = '';
+                pagination.innerHTML = '';
                 const res = await fetch('/admin/api/products?' + params.toString());
 
                 if (!res.ok) {
@@ -145,6 +147,21 @@
                 }
 
                 const data = await res.json();
+
+                const totalPages = Math.max(1, data.totalPages || 1);
+                const products = Array.isArray(data.products) ? data.products : [];
+
+                if (!products.length) {
+                    grid.innerHTML = `<div class="col-span-3 text-center py-20">Tidak ada produk</div>`;
+                    pagination.innerHTML = '';
+                    loading.classList.add('hidden');
+                    loading.classList.remove('flex');
+                    return;
+                }
+                if (page > totalPages) {
+                    loadProducts(totalPages);
+                    return;
+                }
 
                 grid.innerHTML = '';
                 pagination.innerHTML = '';
@@ -165,21 +182,6 @@
                     e: 'Buruk'
                 };
 
-                let products = data.products;
-
-                const selectedGrade = new URLSearchParams(window.location.search).get('grade');
-
-                if (selectedGrade) {
-                    products = products.filter(p =>
-                        p.nutrition_grades?.toLowerCase() === selectedGrade.toLowerCase()
-                    );
-                }
-
-                if (!products || products.length === 0) {
-                    grid.innerHTML = `<div class="col-span-3 text-center py-20">Tidak ada produk</div>`;
-                    return;
-                }
-
                 products.forEach(product => {
 
                     const grade = (product.nutrition_grades || '').toLowerCase();
@@ -189,94 +191,110 @@
                     const color = gradeColors[grade] ?? '#6b7280';
 
                     const card = `
-                                    <div class="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition">
+                                                                                        <div class="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition">
 
-                                        <div class="relative">
+                                                                                            <div class="relative">
 
-                                            <div class="bg-gray-200 aspect-square">
-                                                ${product.image_url
+                                                                                                <div class="bg-gray-200 aspect-square">
+                                                                                                    ${product.image_url
                             ? `<img src="${product.image_url}" class="w-full h-full object-cover">`
                             : `<div class="flex items-center justify-center h-full text-gray-400">No Image</div>`
                         }
-                                            </div>
+                                                                                                </div>
 
-                                            <!-- BADGE -->
-                                            <div class="absolute top-3 left-3 flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow border border-white text-xs font-semibold">
+                                                                                                <!-- BADGE -->
+                                                                                                <div class="absolute top-3 left-3 flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow border border-white text-xs font-semibold">
 
-                                                <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-[10px] font-bold"
-                                                    style="background:${color}">
-                                                    ${grade.toUpperCase()}
-                                                </span>
+                                                                                                    <span class="w-6 h-6 flex items-center justify-center rounded-full text-white text-[10px] font-bold"
+                                                                                                        style="background:${color}">
+                                                                                                        ${grade.toUpperCase()}
+                                                                                                    </span>
 
-                                                <span style="color:${color}">
-                                                    ${gradeLabels[grade]}
-                                                </span>
+                                                                                                    <span style="color:${color}">
+                                                                                                        ${gradeLabels[grade]}
+                                                                                                    </span>
 
-                                            </div>
+                                                                                                </div>
 
-                                        </div>
+                                                                                            </div>
 
-                                        <div class="p-4">
-                                            <h3 class="text-sm font-semibold text-center line-clamp-2">
-                                                ${product.product_name}
-                                            </h3>
+                                                                                            <div class="p-4">
+                                                                                                <h3 class="text-sm font-semibold text-center line-clamp-2">
+                                                                                                    ${product.product_name}
+                                                                                                </h3>
 
-                                            ${product.brands
+                                                                                                ${product.brands
                             ? `<p class="text-gray-400 text-xs text-center mb-3">${product.brands}</p>`
                             : ''
                         }
 
-                                            <a href="/admin/produk/${product.code}"
-                                                class="block text-center bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm">
-                                                Lihat Detail
-                                            </a>
-                                        </div>
+                                                                                                <a href="/admin/produk/${product.code}"
+                                                                                                    class="block text-center bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm">
+                                                                                                    Lihat Detail
+                                                                                                </a>
+                                                                                            </div>
 
-                                    </div>
-                                `;
+                                                                                        </div>
+                                                                                    `;
 
                     grid.insertAdjacentHTML('beforeend', card);
                 });
 
                 // PAGINATION
-                const totalPages = data.totalPages || 1;
+                if (!products || products.length === 0) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
 
                 let start = Math.max(1, page - 2);
                 let end = Math.min(totalPages, page + 2);
 
+                // kalau total sedikit → rapihin
+                if (totalPages <= 3) {
+                    start = 1;
+                    end = totalPages;
+                }
+
                 if (page > 1) {
                     pagination.innerHTML += `
-                                    <button onclick="loadProducts(${page - 1})"
-                                        class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
-                                        Prev
-                                    </button>`;
+                                                                                        <button onclick="loadProducts(${page - 1})"
+                                                                                            class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
+                                                                                            Prev
+                                                                                        </button>`;
                 }
 
                 for (let i = start; i <= end; i++) {
                     pagination.innerHTML += `
-                                    <button onclick="loadProducts(${i})"
-                                        class="px-4 py-2 rounded-lg font-medium
-                                        ${i === page
+                                                                                        <button onclick="loadProducts(${i})"
+                                                                                            class="px-4 py-2 rounded-lg font-medium
+                                                                                            ${i === page
                             ? 'bg-tealMist text-white shadow-md'
                             : 'bg-white border border-gray-300 text-gray-700 hover:bg-tealMist hover:text-white'}">
-                                        ${i}
-                                    </button>`;
+                                                                                            ${i}
+                                                                                        </button>`;
                 }
 
                 if (page < totalPages) {
                     pagination.innerHTML += `
-                                    <button onclick="loadProducts(${page + 1})"
-                                        class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
-                                        Next
-                                    </button>`;
+                                                                                        <button onclick="loadProducts(${page + 1})"
+                                                                                            class="px-4 py-2 bg-white border rounded-lg hover:bg-tealMist hover:text-white">
+                                                                                            Next
+                                                                                        </button>`;
                 }
 
             } catch (err) {
                 console.error(err);
                 grid.innerHTML = `<div class="text-center py-20 text-red-400">API error</div>`;
+            } finally {
+                loading.classList.add('hidden');
+                loading.classList.remove('flex');
             }
 
-            loading.classList.add('hidden');
         }
 
         function toggleDropdown() {
@@ -300,6 +318,7 @@
 
             grid.innerHTML = '';
             loading.classList.remove('hidden');
+            loading.classList.add('flex');
 
             // logic filter
             currentPage = 1;

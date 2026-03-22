@@ -16,74 +16,104 @@ class OpenFoodFactsService
 
         return Cache::remember($cacheKey, $this->cacheTime, function () use ($query, $page, $pageSize, $grade) {
 
+            // Ambil data lebih banyak supaya search lebih akurat
+            $fetchSize = !empty($query) ? 800 : max(100, $pageSize);
+
             $params = [
-                'search_terms'  => $query,
                 'search_simple' => 1,
                 'action'        => 'process',
-                'page'          => $page,
-                'page_size' => 100,
+                'page'          => 1, // ambil batch pertama, lalu paginate sendiri
+                'page_size'     => $fetchSize,
                 'json'          => 1,
                 'fields'        => 'code,product_name,brands,categories,image_url,image_front_url,image_small_url,nutrition_grades,nutriments,ingredients_text,serving_size,nutriscore_score,nutriscore_grade'
             ];
 
-            // ✅ SATU request saja
-            $response = Http::timeout(30)->get($this->baseUrl . '/cgi/search.pl', $params);
+            $searchQuery = $query;
 
-            if (!$response->successful()) {
+            $params['search_terms'] = $searchQuery;
+
+            if (!empty($grade)) {
+                $params['tagtype_0'] = 'nutrition_grades';
+                $params['tag_contains_0'] = 'contains';
+                $params['tag_0'] = strtolower($grade);
+            }
+
+            $allProducts = [];
+
+            for ($i = 1; $i <= 8; $i++) {
+
+                $params['page'] = $i;
+
+                $response = Http::withHeaders([
+                    'User-Agent' => config('app.name') . '/1.0'
+                ])
+                    ->timeout(20)
+                    ->retry(1, 100)
+                    ->get($this->baseUrl . '/cgi/search.pl', $params);
+
+                if (!$response->successful()) continue;
+
+                $data = $response->json();
+
+                if (!isset($data['products']) || !is_array($data['products'])) continue;
+
+                $allProducts = array_merge($allProducts, $data['products']);
+            }
+
+            if (empty($allProducts)) {
                 return [
                     'products' => [],
                     'totalPages' => 1
                 ];
             }
 
-            $data = $response->json();
-
-            if (!$data || !isset($data['products'])) {
-                return [
-                    'products' => [],
-                    'totalPages' => 1
-                ];
-            }
-
-            if (!isset($data['products'])) {
-                return [
-                    'products' => [],
-                    'totalPages' => 1
-                ];
-            }
-
-            // mapping
             $products = array_values(array_filter(
-                array_map([$this, 'mapProduct'], $data['products'])
+                array_map([$this, 'mapProduct'], $allProducts)
             ));
-
-            // Jika ada query (dari search?), beri filter lebih ketat untuk brand/kategori/nama
+            // Filter query (DIPERBAIKI)
             if (!empty($query)) {
-                $searchLower = strtolower(trim($query));
 
-                $products = array_values(array_filter($products, function ($p) use ($searchLower) {
-                    if (!$p) {
-                        return false;
-                    }
+                $queryLower = strtolower(trim($query));
+                $queryWords = array_filter(explode(' ', $queryLower));
 
-                    $nameMatch = str_contains(strtolower($p['product_name'] ?? ''), $searchLower);
-                    $brandMatch = str_contains(strtolower($p['brands'] ?? ''), $searchLower);
+                $products = array_filter($products, function ($p) use ($queryWords) {
 
-                    $categoryMatch = false;
-                    if (!empty($p['categories']) && is_array($p['categories'])) {
-                        foreach ($p['categories'] as $cat) {
-                            if (str_contains(strtolower($cat), $searchLower)) {
-                                $categoryMatch = true;
-                                break;
+                    $fields = [
+                        $p['product_name'] ?? '',
+                        $p['brands'] ?? '',
+                        implode(' ', $p['categories'] ?? [])
+                    ];
+
+                    // gabung semua text
+                    $text = strtolower(implode(' ', $fields));
+
+                    // pecah jadi kata-kata
+                    $words = array_filter(preg_split('/\s+/', $text));
+
+                    foreach ($queryWords as $qWord) {
+
+                        // 🔥 RULE 1: substring match (CORE FIX)
+                        foreach ($words as $word) {
+                            if (str_contains($word, $qWord)) {
+                                return true;
+                            }
+                        }
+
+                        // 🔥 RULE 2: typo tolerance (indomi vs indomie)
+                        foreach ($words as $word) {
+                            if (levenshtein($qWord, $word) <= 2) {
+                                return true;
                             }
                         }
                     }
 
-                    return $nameMatch || $brandMatch || $categoryMatch;
-                }));
+                    return false;
+                });
+
+                $products = array_values($products);
             }
 
-            // ✅ filter di Laravel (AMAN) berdasarkan grade
+            // Filter grade kalau masih perlu aman di Laravel
             if (!empty($grade)) {
                 $products = array_values(array_filter($products, function ($p) use ($grade) {
                     return isset($p['nutrition_grades']) &&
@@ -91,9 +121,55 @@ class OpenFoodFactsService
                 }));
             }
 
+            // 🔥 SORT HANYA SAAT ADA SEARCH / FILTER
+            if (!empty($query) || !empty($grade)) {
+
+                usort($products, function ($a, $b) {
+
+                    $priority = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
+
+                    $gradeA = $priority[$a['nutrition_grades']] ?? 99;
+                    $gradeB = $priority[$b['nutrition_grades']] ?? 99;
+
+                    if ($gradeA !== $gradeB) {
+                        return $gradeA <=> $gradeB;
+                    }
+
+                    if (!empty($a['image_url']) && empty($b['image_url'])) return -1;
+                    if (empty($a['image_url']) && !empty($b['image_url'])) return 1;
+
+                    return 0;
+                });
+            }
+
+            $totalProducts = count($products);
+
+            // 🔥 FIX 1: kalau data sedikit → paksa 1 page
+            if ($totalProducts <= $pageSize) {
+                return [
+                    'products' => array_slice($products, 0, $pageSize),
+                    'totalPages' => 1
+                ];
+            }
+
+            $totalPages = (int) ceil($totalProducts / $pageSize);
+
+            // 🔥 FIX 2: clamp page
+            $page = max(1, min($page, $totalPages));
+
+            $offset = ($page - 1) * $pageSize;
+
+            // 🔥 FIX 3: kalau offset udah keluar dari data → reset
+            if ($offset >= $totalProducts) {
+                $page = 1;
+                $offset = 0;
+            }
+
+            $pagedProducts = array_slice($products, $offset, $pageSize);
+
             return [
-                'products' => $products,
-                'totalPages' => max(1, (int)($data['page_count'] ?? 1))
+                'products' => $pagedProducts,
+                'totalPages' => $totalPages
             ];
         });
     }
