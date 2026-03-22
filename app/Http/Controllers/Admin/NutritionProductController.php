@@ -37,11 +37,12 @@ class NutritionProductController extends Controller
         }
 
         return view('admin.products.index', [
-            'products' => [],
-            'totalPages' => 1,
-            'query' => $request->input('q', ''),
-            'grade' => $request->input('grade', ''),
-            'page' => $request->input('page', 1),
+            'products' => $result['products'],
+            'totalPages' => $result['totalPages'],
+            'query' => $query,
+            'grade' => $grade,
+            'page' => $page,
+            'error' => $result['error'],
         ]);
     }
 
@@ -77,8 +78,17 @@ class NutritionProductController extends Controller
         $grade = $request->input('grade', '');
         $page  = max(1, (int)$request->input('page', 1));
 
-        $data = $this->api->searchProducts($query, $page, 24, $grade);
+        try {
+            $data = $this->api->searchProducts($query, $page, 24, $grade);
 
-        return response()->json($data);
+            return response()->json($data);
+        } catch (\Throwable $e) {
+
+            return response()->json([
+                'products' => [],
+                'totalPages' => 1,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }
