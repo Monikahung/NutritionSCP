@@ -22,7 +22,7 @@
                     <div class="flex flex-col">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-jetblack/60">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-envelope"></i>
                             </span>
                             {{-- Email Input --}}
                             <input type="email" name="email" placeholder="Email" autocomplete="off"
@@ -71,7 +71,7 @@
 
                 {{-- Registration Link --}}
                 <p class="mt-4 text-center text-sm text-jetblack">
-                    Belum punya akun? <a href="#"
+                    Belum punya akun? <a href="{{ route('register') }}"
                         class="underline font-semibold text-jetblack hover:text-jetblack/80">Registrasi Sekarang!</a>
                 </p>
             </div>
