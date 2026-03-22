@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="min-h-[70vh] flex items-center justify-center px-4 py-12 bg-softivory">
-        <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-36 items-center">
+        <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-36 items-center">
 
             <div class="flex flex-col">
                 {{-- Title --}}
@@ -77,7 +77,7 @@
             </div>
 
             {{-- Login Image --}}
-            <div class="flex items-center justify-center rounded-sm">
+            <div class="hidden md:flex items-center justify-center rounded-sm">
                 <img src="{{ asset('img/login.png') }}" alt="Ilustrasi Login" class="w-full h-full object-cover">
             </div>
         </div>
